@@ -94,6 +94,18 @@ export default {
       } catch (error) {
         console.log(error)
       }
+
+      const test = await axios.get(
+          `https://api.twitch.tv/helix/streams?user_id=${userId}`,
+          {
+            headers: {
+              'Client-ID': clientId,
+              Authorization: 'Bearer ' + access_token
+            }
+          }
+      )
+
+      console.log(test)
     },
     formatDate(date) {
       const options = { day: '2-digit', month: '2-digit', year: 'numeric' }

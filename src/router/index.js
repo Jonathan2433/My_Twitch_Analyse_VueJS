@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TheResume from '@/components/TheResume.vue'
+import TheHome from "@/views/Home/TheHome.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'resume',
-      component: TheResume
+      name: 'home',
+      component: TheHome
     }
   ]
 })
