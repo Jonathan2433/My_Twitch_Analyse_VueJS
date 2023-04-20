@@ -9,13 +9,12 @@
       <div class="recent-followers">
         <h3>Mes 3 derniers followers :</h3>
         <div class="recent-followers-container">
-          <div class="follower" v-for="(follower, index) in followerData" :key="index">
-            <img :src="follower.profile_image_url" alt="Avatar de {{follower.display_name}}" />
-            <div class="follower-text">
-              <h3>{{ follower.display_name }}</h3>
-              <p>depuis le {{ formatDate(recentFollowers[index].followed_at) }}</p>
-            </div>
-          </div>
+          <UserCard v-for="(follower, index) in followerData" :key="index"
+                    :profile-image-url="follower.profile_image_url"
+                    :display-name="follower.display_name"
+                    :followed-at="recentFollowers[index].followed_at"
+                    bgColor="rebeccapurple"
+          />
         </div>
       </div>
     </div>
@@ -24,6 +23,7 @@
 
 <script>
 import axios from 'axios'
+import UserCard from "@/components/UserCard.vue";
 // GET ACCESS TOKEN
 // axios.post('https://id.twitch.tv/oauth2/token', {
 //   client_id: 'ghcpdfskl6dqnkfqijx3vjht02zqgo',
@@ -36,6 +36,7 @@ import axios from 'axios'
 
 export default {
   name: 'theResume',
+  components: {UserCard},
   data() {
     return {
       totalFollowers: 0,

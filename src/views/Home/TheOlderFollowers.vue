@@ -3,22 +3,23 @@
         <h2>Mes 5 plus anciens followers :</h2>
         <div class="oldest">
             <div class="followers-container">
-                <div class="follower" v-for="(follower, index) in followerData" :key="index">
-                    <img :src="follower.profile_image_url" alt="Avatar de {{follower.display_name}}" />
-                    <div class="follower-text">
-                        <h3>{{ follower.display_name }}</h3>
-                        <p>depuis le {{ formatDate(oldestFollowers[index].followed_at) }}</p>
-                    </div>
-                </div>
+                <UserCard v-for="(follower, index) in followerData" :key="index"
+                          :profile-image-url="follower.profile_image_url"
+                          :display-name="follower.display_name"
+                          :followed-at="oldestFollowers[index].followed_at"
+                          bgColor="rebeccapurple"
+                />
             </div>
         </div>
     </div>
 </template>
 <script>
 import axios from 'axios'
+import UserCard from "@/components/UserCard.vue";
 
 export default {
     name: 'TheOlderFollowers',
+    components: {UserCard},
     data() {
         return {
             followerData: [],
