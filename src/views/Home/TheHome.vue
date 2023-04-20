@@ -1,19 +1,19 @@
 <template>
     <div class="home">
         <TheResume />
-        <TheLastStream />
+        <TheOlderFollowers />
     </div>
 </template>
 
 <script>
 import TheResume from '@/views/Home/TheResume.vue'
-import TheLastStream from '@/views/Home/TheLastStream.vue'
+import TheOlderFollowers from '@/views/Home/TheOlderFollowers.vue'
 
 export default {
     name: 'TheHome',
     components: {
         TheResume,
-        TheLastStream
+        TheOlderFollowers
     }
 }
 </script>

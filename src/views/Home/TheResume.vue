@@ -1,5 +1,5 @@
 <template>
-  <h1>RÉSUMÉ :</h1>
+  <h2>RÉSUMÉ :</h2>
   <div class="resume">
     <div class="main-content">
       <div class="total-followers">
@@ -90,22 +90,9 @@ export default {
           )
           this.followerData.push(followerResponse.data.data[0])
         }
-        console.log(this.followerData)
       } catch (error) {
         console.log(error)
       }
-
-      const test = await axios.get(
-          `https://api.twitch.tv/helix/streams?user_id=${userId}`,
-          {
-            headers: {
-              'Client-ID': clientId,
-              Authorization: 'Bearer ' + access_token
-            }
-          }
-      )
-
-      console.log(test)
     },
     formatDate(date) {
       const options = { day: '2-digit', month: '2-digit', year: 'numeric' }
@@ -116,7 +103,7 @@ export default {
 </script>
 
 <style scoped>
-h1 {
+h2 {
   padding: 20px;
   color: white;
 }
