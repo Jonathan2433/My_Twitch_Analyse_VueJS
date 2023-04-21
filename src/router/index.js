@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TheHome from '@/views/Home/TheHome.vue'
 import TheSuivi from '@/views/Suivi/TheSuivi.vue'
 import TopGames from '@/views/Top_Games/TopGames.vue'
+import Console from '@/views/Console/Console.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +18,14 @@ const router = createRouter({
             component: TheSuivi
         },
         {
-            path: '/top-games',
-            name: 'top-games',
+            path: '/top-categorie',
+            name: 'top-categorie',
             component: TopGames
+        },
+        {
+            path: '/sondage',
+            name: 'sondage',
+            component: Console
         }
     ]
 })

@@ -11,8 +11,8 @@
             <nav>
                 <router-link to="/">Accueil</router-link>
                 <router-link to="/suivi">Suivi</router-link>
-                <router-link to="/top-games">Top Games</router-link>
-                <router-link to="/console">Console</router-link>
+                <router-link to="/top-categorie">Top Catégorie</router-link>
+                <router-link to="/sondage">Sondage</router-link>
             </nav>
         </header>
         <main>

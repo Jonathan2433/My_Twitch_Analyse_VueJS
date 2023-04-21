@@ -5,7 +5,11 @@
             <div class="game" v-for="(game, index) in topGames" :key="index">
                 <div class="rank">{{ index + 1 }}</div>
                 <div class="game-info">
-                    <img :src="game.box_art_url.replace('{width}x{height}', '300x400')" :alt="game.name" class="game-image" />
+                    <img
+                        :src="game.box_art_url.replace('{width}x{height}', '300x400')"
+                        :alt="game.name"
+                        class="game-image"
+                    />
                     <div class="game-name">{{ game.name }}</div>
                 </div>
             </div>
@@ -39,7 +43,6 @@ export default {
             })
 
             this.topGames = response.data.data
-            console.log(this.topGames)
         }
     }
 }
