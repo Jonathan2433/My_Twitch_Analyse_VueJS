@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import TheHistogramChart from "./TheHistogram.vue";
+import TheHistogramChart from './TheHistogram.vue'
 
 export default {
-    name: "Suivi",
+    name: 'Suivi',
     components: {
-        TheHistogramChart,
-    },
-};
+        TheHistogramChart
+    }
+}
 </script>

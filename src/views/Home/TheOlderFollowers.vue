@@ -3,11 +3,13 @@
         <h2>MES 5 PLUS ANCIENS FOLLOWERS :</h2>
         <div class="oldest">
             <div class="followers-container">
-                <UserCard v-for="(follower, index) in followerData" :key="index"
-                          :profile-image-url="follower.profile_image_url"
-                          :display-name="follower.display_name"
-                          :followed-at="oldestFollowers[index].followed_at"
-                          bgColor="rebeccapurple"
+                <UserCard
+                    v-for="(follower, index) in followerData"
+                    :key="index"
+                    :profile-image-url="follower.profile_image_url"
+                    :display-name="follower.display_name"
+                    :followed-at="oldestFollowers[index].followed_at"
+                    bgColor="rebeccapurple"
                 />
             </div>
         </div>
@@ -15,15 +17,15 @@
 </template>
 <script>
 import axios from 'axios'
-import UserCard from "@/components/UserCard.vue";
+import UserCard from '@/components/UserCard.vue'
 
 export default {
     name: 'TheOlderFollowers',
-    components: {UserCard},
+    components: { UserCard },
     data() {
         return {
             followerData: [],
-            oldestFollowers : []
+            oldestFollowers: []
         }
     },
     mounted() {
@@ -38,36 +40,47 @@ export default {
             try {
                 let oldestFollowers = []
 
-                let response = await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100`, {
-                    headers: {
-                        'Client-ID': clientId,
-                        Authorization: 'Bearer ' + access_token
+                let response = await axios.get(
+                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100`,
+                    {
+                        headers: {
+                            'Client-ID': clientId,
+                            Authorization: 'Bearer ' + access_token
+                        }
                     }
-                })
+                )
 
                 oldestFollowers.push(...response.data.data)
 
                 while (response.data.pagination.cursor) {
-                    response = await axios.get(`https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100&after=${response.data.pagination.cursor}`, {
-                        headers: {
-                            'Client-ID': clientId,
-                            Authorization: 'Bearer ' + access_token
+                    response = await axios.get(
+                        `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100&after=${response.data.pagination.cursor}`,
+                        {
+                            headers: {
+                                'Client-ID': clientId,
+                                Authorization: 'Bearer ' + access_token
+                            }
                         }
-                    })
+                    )
 
                     oldestFollowers.push(...response.data.data)
                 }
 
-                oldestFollowers = oldestFollowers.sort((a, b) => a.followed_at.localeCompare(b.followed_at)).slice(0, 5)
+                oldestFollowers = oldestFollowers
+                    .sort((a, b) => a.followed_at.localeCompare(b.followed_at))
+                    .slice(0, 5)
                 this.oldestFollowers = oldestFollowers
                 for (let i = 0; i < oldestFollowers.length; i++) {
                     const follower = oldestFollowers[i].from_id
-                    const followerResponse = await axios.get(`https://api.twitch.tv/helix/users?id=${follower}`, {
-                        headers: {
-                            'Client-ID': clientId,
-                            Authorization: 'Bearer ' + access_token
+                    const followerResponse = await axios.get(
+                        `https://api.twitch.tv/helix/users?id=${follower}`,
+                        {
+                            headers: {
+                                'Client-ID': clientId,
+                                Authorization: 'Bearer ' + access_token
+                            }
                         }
-                    })
+                    )
 
                     this.followerData.push(followerResponse.data.data[0])
                 }

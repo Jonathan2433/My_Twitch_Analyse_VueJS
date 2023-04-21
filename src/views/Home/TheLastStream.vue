@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
 const userId = '144395906'
@@ -31,26 +31,34 @@ export default {
         }
     },
     mounted() {
-        this.getLastStreamInfo();
+        this.getLastStreamInfo()
     },
     methods: {
         async getLastStreamInfo() {
-            const userId = '144395906';
-            const response = await axios.get(`https://api.twitch.tv/helix/channels?broadcaster_id=${userId}`, {
-                headers: {
-                    'Client-ID': clientId,
-                    Authorization: 'Bearer ' + access_token
+            const response = await axios.get(
+                `https://api.twitch.tv/helix/channels?broadcaster_id=${userId}`,
+                {
+                    headers: {
+                        'Client-ID': clientId,
+                        Authorization: 'Bearer ' + access_token
+                    }
                 }
-            });
-            console.log(response.data.data[0])
-            const streamInfo = response.data.data[0];
-            this.title = streamInfo.title;
-            this.gameName = streamInfo.game_name;
-            this.language = streamInfo.language;
-            this.userName = streamInfo.broadcaster_name;
+            )
+            const streamInfo = response.data.data[0]
+            this.title = streamInfo.title
+            this.gameName = streamInfo.game_name
+            this.language = streamInfo.language
+            this.userName = streamInfo.broadcaster_name
         },
         formatDate(date) {
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' }
+            const options = {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            }
             return new Date(date).toLocaleDateString('fr-FR', options)
         }
     }
