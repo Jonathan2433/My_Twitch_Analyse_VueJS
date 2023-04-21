@@ -5,7 +5,7 @@
             <label htmlFor='question'>Question :</label>
             <input type='text' id='question' v-model='question' required>
 
-            <label htmlFor='choices'>Choix (séparés par une virgule) :</label>
+            <label htmlFor='choices'>Choix (séparés par une virgule, maximum 5) :</label>
             <input type='text' id='choices' v-model='choices' required>
 
             <label htmlFor='duration'>Durée du sondage (secondes):</label>
@@ -59,7 +59,6 @@ export default {
                 "channel_points_per_vote": this.channel_points_per_vote,
                 "duration": this.duration
             };
-            console.log(requestBody)
             axios.post(`https://api.twitch.tv/helix/polls`, requestBody, {
                 headers: {
                     Authorization: 'Bearer ' + accessToken,
@@ -76,7 +75,6 @@ export default {
                     alert('Une erreur est survenue lors de la création du sondage.');
                 });
         },
-
         updateChannelPointsPerVote() {
             if (this.channel_points_voting_enabled) {
                 this.channel_points_per_vote = 100;
@@ -101,6 +99,8 @@ form {
     gap: 1rem;
     max-width: 500px;
     margin: 0 auto;
+    background-color: #2c2c2c;
+    padding: 20px;
 }
 
 label {

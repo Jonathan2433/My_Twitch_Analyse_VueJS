@@ -117,17 +117,6 @@ h2 {
     align-items: center;
 }
 
-.follower {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 1rem;
-    color: #fff;
-    background-color: rebeccapurple;
-    padding: 20px;
-    border-radius: 10px;
-    width: 100%;
-}
 
 .follower img {
     width: 50px;
