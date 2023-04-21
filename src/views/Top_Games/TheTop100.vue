@@ -2,7 +2,7 @@
     <div>
         <h2>Top 100 Twitch Streams</h2>
         <div class="top-games-container">
-            <div class="game" v-for="(game, index) in topGames" :key="index">
+            <div class="game" v-for="(game, index) in topGames" :key="index" @click="redirectToTwitch(game.name)">
                 <div class="rank">{{ index + 1 }}</div>
                 <div class="game-info">
                     <img
@@ -10,7 +10,7 @@
                         :alt="game.name"
                         class="game-image"
                     />
-                    <div class="game-name">{{ game.name }}</div>
+                    <div class="game-name" @click="redirectToTwitch(game.name)">{{ game.name }}</div>
                 </div>
             </div>
         </div>
@@ -43,6 +43,9 @@ export default {
             })
 
             this.topGames = response.data.data
+        },
+        redirectToTwitch(categoryName) {
+            window.open(`https://www.twitch.tv/directory/game/${categoryName}`, '_blank');
         }
     }
 }
@@ -63,6 +66,7 @@ export default {
     flex-direction: row;
     overflow: hidden;
     width: calc(33.33% - 20px);
+    cursor: pointer;
 }
 
 .game .rank {
@@ -99,6 +103,7 @@ export default {
     font-size: 1.5rem;
     font-weight: bold;
     margin: 10px 0;
+    cursor: pointer;
 }
 
 .game .game-viewers {

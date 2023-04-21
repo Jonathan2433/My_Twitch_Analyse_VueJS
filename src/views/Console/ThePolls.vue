@@ -1,6 +1,6 @@
 <template>
     <div class="polls">
-        <h2 class="title">Sondages en cours :</h2>
+        <h2 class="title" v-if="activePolls.length > 0">Sondage actuel :</h2>
         <ul>
             <li v-for="poll in activePolls" :key="poll.id" class="poll-item">
                 <h3 class="poll-title">{{ poll.title }}</h3>
