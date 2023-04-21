@@ -11,6 +11,7 @@
       <nav>
         <router-link to="/">Accueil</router-link>
         <router-link to="/suivi">Suivi</router-link>
+        <router-link to="/console">Console</router-link>
       </nav>
     </header>
     <main>
