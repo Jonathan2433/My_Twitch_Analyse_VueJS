@@ -64,7 +64,7 @@ export default {
 
 .game .rank {
     align-items: center;
-    background-color: #f44336;
+    background-color: hsla(160, 100%, 37%, 1);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -92,7 +92,7 @@ export default {
 }
 
 .game .game-name {
-    color: #4caf50;
+    color: hsla(160, 100%, 37%, 1);
     font-size: 1.5rem;
     font-weight: bold;
     margin: 10px 0;
