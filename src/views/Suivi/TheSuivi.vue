@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import TheHistogramChart from "@/components/TheHistogramChart.vue";
+import TheHistogramChart from "./TheHistogram.vue";
 
 export default {
     name: "Suivi",
