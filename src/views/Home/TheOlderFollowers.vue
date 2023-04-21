@@ -17,58 +17,6 @@
 import axios from 'axios'
 import UserCard from "@/components/UserCard.vue";
 
-
-
-
-const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
-const userId = '144395906'
-const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
-
-
-try {
-    axios.post('https://api.twitch.tv/helix/polls', {
-        broadcaster_id: userId,
-        title: 'Heads or Tails?',
-        choices: [
-            {
-                title: 'Heads'
-            },
-            {
-                title: 'Tails'
-            }
-        ],
-        channel_points_voting_enabled: true,
-        channel_points_per_vote: 100,
-        duration: 1800
-    }, {
-        headers: {
-            Authorization: 'Bearer ' + access_token,
-            'Client-ID': clientId,
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-} catch (e) {
-    console.log(e)
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default {
     name: 'TheOlderFollowers',
     components: {UserCard},

@@ -52,9 +52,7 @@ export default {
         createChart() {
             const ctx = this.$refs.chart.getContext("2d");
             const months = Object.keys(this.followersByMonth).reverse();
-            console.log(months)
             const followersCount = Object.values(this.followersByMonth).reverse();
-            console.log(followersCount)
             const myChart = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -65,7 +63,7 @@ export default {
                             data: followersCount,
                             fill: false,
                             borderColor: "rgb(75, 192, 192)",
-                            tension: 0.1,
+                            tension: 0.25,
                         },
                     ],
                 },
