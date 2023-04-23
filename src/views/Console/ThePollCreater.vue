@@ -43,7 +43,6 @@ export default {
             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo';
             const accessToken = '9jfu059cnliwdj23a1sp6kvjmg1byv';
 
-
             const choicesArray = this.choices.split(',').map(choice => choice.trim());
 
             let choicesAssociatifArray = [];

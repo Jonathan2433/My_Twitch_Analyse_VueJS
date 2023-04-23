@@ -3,6 +3,7 @@
         <ThePollCreater />
         <ThePolls />
         <TheLastPolls />
+        <ThePredictionCreater />
     </div>
 </template>
 
@@ -10,10 +11,11 @@
 import ThePollCreater from '@/views/Console/ThePollCreater.vue'
 import ThePolls from '@/views/Console/ThePolls.vue'
 import TheLastPolls from '@/views/Console/TheLastPolls.vue'
+import ThePredictionCreater from '@/views/Console/ThePredictionCreater.vue'
 
 export default {
     name: 'Console',
-    components: { TheLastPolls, ThePolls, ThePollCreater }
+    components: { ThePredictionCreater, TheLastPolls, ThePolls, ThePollCreater }
 }
 </script>
 
