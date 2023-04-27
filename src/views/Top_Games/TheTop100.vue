@@ -1,15 +1,17 @@
 <template>
     <div>
         <h2>Top 100 Twitch Streams</h2>
+        <input type="text" id="search-input" placeholder="Rechercher une catégorie" v-model="searchQuery" />
         <div class="top-games-container">
-            <div class="game" v-for="(game, index) in topGames" :key="index" @click="redirectToTwitch(game.name)">
-                <div class="rank">{{ index + 1 }}</div>
+            <div class="game" v-for="(game, index) in filteredGames" :key="game.id" @click="redirectToTwitch(game)">
+                <div v-if="searchQuery">
+                    <div class="rank">{{ game.originalRank }}</div>
+                </div>
+                <div v-else>
+                    <div class="rank">{{ index + 1 }}</div>
+                </div>
                 <div class="game-info">
-                    <img
-                        :src="game.box_art_url.replace('{width}x{height}', '300x400')"
-                        :alt="game.name"
-                        class="game-image"
-                    />
+                    <img :src="game.box_art_url.replace('{width}x{height}', '300x400')" :alt="game.name" class="game-image" />
                     <div class="game-name" @click="redirectToTwitch(game.name)">{{ game.name }}</div>
                 </div>
             </div>
@@ -19,6 +21,7 @@
 
 <script>
 import axios from 'axios'
+import autoComplete from "@tarekraafat/autocomplete.js";
 
 const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
 const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
@@ -27,7 +30,10 @@ export default {
     name: 'TheTop100',
     data() {
         return {
-            topGames: []
+            topGames: [],
+            searchableGames: [],
+            searchQuery: '',
+            originalRankings: []
         }
     },
     mounted() {
@@ -41,15 +47,68 @@ export default {
                     Authorization: 'Bearer ' + access_token
                 }
             })
-
             this.topGames = response.data.data
+            this.searchableGames = this.topGames.map(game => {
+                return { value: game.name, data: game };
+            });
+            this.originalRankings = this.topGames.map((game, index) => index + 1);
+            this.topGames = response.data.data;
+            this.updateSearchableGames();
+            this.initAutoComplete();
         },
-        redirectToTwitch(categoryName) {
-            window.open(`https://www.twitch.tv/directory/game/${categoryName}`, '_blank');
+        updateSearchableGames() {
+            this.searchableGames = this.filteredGames.map((game) => {
+                return { value: game.name, data: game };
+            });
+        },
+
+        initAutoComplete() {
+            const searchInput = document.querySelector('#search-input');
+
+            const autoCompletejs = new autoComplete({
+                data: {
+                    src: this.topGames,
+                    cache: true,
+                    key: "name"
+                },
+                selector: "#search-input",
+                threshold: 2,
+                debounce: 300,
+                searchEngine: "strict",
+                highlight: true,
+                maxResults: 10,
+                onSelection: feedback => {
+                    searchInput.blur();
+                    this.redirectToTwitch(feedback.selection.value);
+                }
+            });
+        },
+        redirectToTwitch(game) {
+            window.open(`https://www.twitch.tv/directory/game/${game.name}`, '_blank');
+        },
+        searchGames(query) {
+            const filteredGames = this.topGames.filter(game => {
+                return game.name.toLowerCase().includes(query.toLowerCase());
+            });
+            const rankedGames = filteredGames.map((game) => {
+                const originalRank = this.originalRankings[this.topGames.indexOf(game)];
+                return { ...game, originalRank };
+            });
+            return rankedGames.sort((a, b) => a.originalRank - b.originalRank);
+        }
+    },
+    computed: {
+        filteredGames() {
+            if (this.searchQuery === '') {
+                return this.topGames;
+            } else {
+                return this.searchGames(this.searchQuery);
+            }
         }
     }
 }
 </script>
+
 
 <style scoped>
 .top-games-container {
@@ -110,5 +169,20 @@ export default {
     color: #000;
     font-size: 1rem;
     font-weight: bold;
+}
+
+#search-input {
+    padding: 10px;
+    font-size: 1.5rem;
+    border: 2px solid hsla(160, 100%, 37%, 1);
+    border-radius: 5px;
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: hsla(160, 100%, 47%, 1);
+    box-shadow: 0px 0px 5px hsla(160, 100%, 47%, 0.5);
 }
 </style>

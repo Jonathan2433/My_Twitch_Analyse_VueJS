@@ -1,5 +1,5 @@
 <template>
-    <h2>Les 5 derniers sondages :</h2>
+    <h2>Les 6 derniers sondages :</h2>
     <div class="last-polls-container">
         <div v-for="(poll, index) in lastPolls" :key="poll.id" class="poll-card">
             <div class="poll-info">
