@@ -3,6 +3,7 @@
         <h2>MES 5 PLUS ANCIENS FOLLOWERS :</h2>
         <div class="oldest">
             <div class="followers-container">
+                <!-- Utilisation des props de notre composant UserCard -->
                 <UserCard
                     v-for="(follower, index) in followerData"
                     :key="index"
@@ -24,14 +25,15 @@ export default {
     components: { UserCard },
     data() {
         return {
-            followerData: [],
-            oldestFollowers: []
+            followerData: [], // Tableau pour stocker les données des followers les plus anciens
+            oldestFollowers: [] // Tableau pour stocker les informations sur les followers les plus anciens
         }
     },
     mounted() {
         this.getFollowers()
     },
     methods: {
+        // Méthode pour récupérer les informations des followers
         async getFollowers() {
             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
             const userId = '144395906'
@@ -40,6 +42,7 @@ export default {
             try {
                 let oldestFollowers = []
 
+                // Récupération des 100 premiers followers
                 let response = await axios.get(
                     `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100`,
                     {
@@ -52,6 +55,7 @@ export default {
 
                 oldestFollowers.push(...response.data.data)
 
+                // Tant qu'il y a une page suivante, récupération des 100 prochains followers
                 while (response.data.pagination.cursor) {
                     response = await axios.get(
                         `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100&after=${response.data.pagination.cursor}`,
@@ -66,10 +70,14 @@ export default {
                     oldestFollowers.push(...response.data.data)
                 }
 
+                // Tri des followers par date de suivi et sélection des 5 plus anciens
                 oldestFollowers = oldestFollowers
+                    // Comparaison de la date de suivie
                     .sort((a, b) => a.followed_at.localeCompare(b.followed_at))
                     .slice(0, 5)
                 this.oldestFollowers = oldestFollowers
+
+                // Appel d'API pour récupèrer les informations complètes de ces 5 derniers Followers
                 for (let i = 0; i < oldestFollowers.length; i++) {
                     const follower = oldestFollowers[i].from_id
                     const followerResponse = await axios.get(
@@ -116,7 +124,6 @@ h2 {
     flex-direction: column;
     align-items: center;
 }
-
 
 .follower img {
     width: 50px;

@@ -22,20 +22,22 @@ export default {
     name: 'TheLastStream',
     data() {
         return {
-            thumbnailUrl: '',
-            title: '',
-            gameName: '',
-            language: '',
-            startedAt: '',
-            userName: ''
+            thumbnailUrl: '', // URL de la miniature du dernier flux
+            title: '', // Titre du dernier flux
+            gameName: '', // Nom du jeu du dernier flux
+            language: '', // Langue du dernier flux
+            startedAt: '', // Date et heure de début du dernier flux
+            userName: '' // Nom d'utilisateur du diffuseur du dernier flux
         }
     },
     mounted() {
         this.getLastStreamInfo()
     },
     methods: {
+        // Méthode pour récupérer les informations du dernier flux
         async getLastStreamInfo() {
             const response = await axios.get(
+                // Appel d'API
                 `https://api.twitch.tv/helix/channels?broadcaster_id=${userId}`,
                 {
                     headers: {
@@ -44,11 +46,11 @@ export default {
                     }
                 }
             )
-            const streamInfo = response.data.data[0]
-            this.title = streamInfo.title
-            this.gameName = streamInfo.game_name
-            this.language = streamInfo.language
-            this.userName = streamInfo.broadcaster_name
+            const streamInfo = response.data.data[0] // Récupération des informations de la chaîne
+            this.title = streamInfo.title // Stockage du titre du dernier flux
+            this.gameName = streamInfo.game_name // Stockage du nom du jeu du dernier flux
+            this.language = streamInfo.language // Stockage de la langue du dernier flux
+            this.userName = streamInfo.broadcaster_name // Stockage du nom d'utilisateur du diffuseur du dernier flux
         },
         formatDate(date) {
             const options = {
@@ -59,7 +61,7 @@ export default {
                 minute: 'numeric',
                 second: 'numeric'
             }
-            return new Date(date).toLocaleDateString('fr-FR', options)
+            return new Date(date).toLocaleDateString('fr-FR', options) // Formatage de la date en utilisant les options spécifiées
         }
     }
 }

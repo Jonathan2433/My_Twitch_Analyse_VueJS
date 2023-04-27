@@ -17,49 +17,49 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
-const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo';
-const userId = '144395906';
-const access_token = '9jfu059cnliwdj23a1sp6kvjmg1byv';
+const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+const userId = '144395906'
+const access_token = '9jfu059cnliwdj23a1sp6kvjmg1byv'
 
 export default {
     name: 'TheLastPolls',
     data() {
         return {
-            lastPolls: [],
-        };
+            lastPolls: []
+        }
     },
     mounted() {
-        this.getLastPolls();
+        this.getLastPolls()
         setInterval(() => {
-            this.getLastPolls();
-        }, 30000);
+            this.getLastPolls()
+        }, 30000)
     },
     methods: {
         async getLastPolls() {
             try {
+                // Méthode pour récupérer les 6 derniers sondages
                 const response = await axios.get(
                     `https://api.twitch.tv/helix/polls?broadcaster_id=${userId}&first=6`,
                     {
                         headers: {
                             'Client-ID': clientId,
-                            Authorization: 'Bearer ' + access_token,
-                        },
+                            Authorization: 'Bearer ' + access_token
+                        }
                     }
-                );
-                this.lastPolls = response.data.data;
-                console.log(this.lastPolls)
+                )
+                this.lastPolls = response.data.data
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
         },
         formatDate(date) {
-            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            return new Date(date).toLocaleDateString('fr-FR', options);
-        },
-    },
-};
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' }
+            return new Date(date).toLocaleDateString('fr-FR', options)
+        }
+    }
+}
 </script>
 <style scoped>
 .last-polls-container {

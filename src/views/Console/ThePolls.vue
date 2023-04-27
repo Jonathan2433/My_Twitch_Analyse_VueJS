@@ -1,5 +1,6 @@
 <template>
     <div class="polls">
+        <!-- S'affiche uniquement si il y as un sondage en cour     -->
         <h2 class="title" v-if="activePolls.length > 0">Sondage actuel :</h2>
         <ul>
             <li v-for="poll in activePolls" :key="poll.id" class="poll-item">
@@ -8,53 +9,57 @@
                     <li class="poll-choice" v-for="(choice, index) in poll.choices" :key="index">
                         {{ choice.title }} | {{ choice.votes }}
                     </li>
-<!--                    <p>Temps restant : {{ formatTimeRemaining(poll) }}</p>-->
+                    <!--  <p>Temps restant : {{ formatTimeRemaining(poll) }}</p>-->
                 </div>
-                <button class="end-poll-button" @click="endPoll(poll.id)">Terminer le sondage</button>
+                <button class="end-poll-button" @click="endPoll(poll.id)">
+                    Terminer le sondage
+                </button>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 
-const clientId = "ghcpdfskl6dqnkfqijx3vjht02zqgo";
-const userId = "144395906";
-const access_token = "9jfu059cnliwdj23a1sp6kvjmg1byv";
+const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+const userId = '144395906'
+const access_token = '9jfu059cnliwdj23a1sp6kvjmg1byv'
 export default {
-    name: "ThePolls",
+    name: 'ThePolls',
     data() {
         return {
-            polls: [],
-        };
+            polls: []
+        }
     },
     mounted() {
-        this.getPolls();
-        setInterval(this.getPolls, 1000);
+        this.getPolls()
+        setInterval(this.getPolls, 1000)
     },
     computed: {
         activePolls() {
-            return this.polls.filter((poll) => poll.status === "ACTIVE");
-        },
+            return this.polls.filter((poll) => poll.status === 'ACTIVE')
+        }
     },
     methods: {
+        // Méthode pour récupérer les sondages en cours
         async getPolls() {
             try {
                 const response = await axios.get(
                     `https://api.twitch.tv/helix/polls?broadcaster_id=${userId}`,
                     {
                         headers: {
-                            "Client-ID": clientId,
-                            Authorization: "Bearer " + access_token,
-                        },
+                            'Client-ID': clientId,
+                            Authorization: 'Bearer ' + access_token
+                        }
                     }
-                );
-                this.polls = response.data.data;
+                )
+                this.polls = response.data.data
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
         },
+        // Méthode pour stoper le sondage en cours
         async endPoll(pollId) {
             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
             const accessToken = '9jfu059cnliwdj23a1sp6kvjmg1byv'
@@ -80,21 +85,20 @@ export default {
             }
         },
         formatDate(date) {
-            const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-            return new Date(date).toLocaleDateString("fr-FR", options);
-        },
-        formatTimeRemaining(poll) {
-            const duration = poll.duration;
-            const startedAt = new Date(poll.started_at);
-            const now = new Date();
-            const timeRemainingInSeconds = (duration - (now - startedAt) / 1000).toFixed(0);
-            // const minutes = Math.floor(timeRemainingInSeconds / 60);
-            const seconds = timeRemainingInSeconds % 60;
-            return `${seconds}s`;
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' }
+            return new Date(date).toLocaleDateString('fr-FR', options)
         }
-,
-    },
-};
+        // formatTimeRemaining(poll) {
+        //     const duration = poll.duration
+        //     const startedAt = new Date(poll.started_at)
+        //     const now = new Date()
+        //     const timeRemainingInSeconds = (duration - (now - startedAt) / 1000).toFixed(0)
+        //     // const minutes = Math.floor(timeRemainingInSeconds / 60);
+        //     const seconds = timeRemainingInSeconds % 60
+        //     return `${seconds}s`
+        // }
+    }
+}
 </script>
 
 <style scoped>

@@ -10,22 +10,25 @@ export default {
     name: 'TheHistogramChart',
     data() {
         return {
-            followersByMonth: {}
+            followersByMonth: {} // Tableau associatif pour stocker le nombre de followers mensuel
         }
     },
     mounted() {
         this.getFollowersList()
     },
     methods: {
+        // Méthode pour récupérer le nombre de followers mensuel
         async getFollowersList() {
+            const userId = '144395906'
             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
             const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
             let followers = []
             let cursor = ''
 
+            // Tant qu'il y a une page suivante, récupération des 100 prochains followers
             do {
                 const response = await fetch(
-                    `https://api.twitch.tv/helix/users/follows?to_id=144395906&first=100&after=${cursor}`,
+                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100&after=${cursor}`,
                     {
                         headers: {
                             'Client-ID': clientId,
@@ -41,6 +44,7 @@ export default {
             this.groupFollowersByMonth(followers)
             this.createChart()
         },
+        // Méthode pour compter le nombre de followers par mois
         groupFollowersByMonth(followers) {
             followers.forEach((follower) => {
                 const date = new Date(follower.followed_at)
@@ -54,6 +58,7 @@ export default {
                 }
             })
         },
+        // Initialisation et Création de notre graphique Line
         createChart() {
             const ctx = this.$refs.chart.getContext('2d')
             const months = Object.keys(this.followersByMonth).reverse()

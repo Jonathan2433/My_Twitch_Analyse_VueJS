@@ -41,33 +41,22 @@ export default {
     components: { UserCard },
     data() {
         return {
-            totalFollowers: 0,
-            recentFollowers: [],
-            followerData: []
+            totalFollowers: 0, // Initialisation de notre compteur de Followers Total
+            recentFollowers: [], // Tableau pour stocker les followers les plus récents
+            followerData: [] // Tableau pour stocker les données complètes de ces followers les plus récents
         }
     },
     mounted() {
         this.getFollowers()
     },
     methods: {
+        // Méthode pour récupérer les followers + Le nombre de Followers
         async getFollowers() {
             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
             const userId = '144395906'
             const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
 
             try {
-                const response = await axios.get(
-                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}`,
-                    {
-                        headers: {
-                            'Client-ID': clientId,
-                            Authorization: 'Bearer ' + access_token
-                        }
-                    }
-                )
-
-                this.totalFollowers = response.data.total
-
                 const usersResponse = await axios.get(
                     `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=3`,
                     {
@@ -77,9 +66,10 @@ export default {
                         }
                     }
                 )
-
+                this.totalFollowers = usersResponse.data.total // Nombre total de followers
                 this.recentFollowers = usersResponse.data.data
 
+                // Appel d'API pour récupèrer les informations complètes des 3 Followers les plus récenst
                 for (let i = 0; i < 3; i++) {
                     const follower = this.recentFollowers[i].from_id
                     const followerResponse = await axios.get(

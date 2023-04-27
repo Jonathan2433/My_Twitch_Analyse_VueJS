@@ -1,3 +1,4 @@
+<!--EN COURS DE DEV / FONCTIONNEL MAIS PAS DE STYLE-->
 <template>
     <div>
         <h2>Créer une prédiction</h2>
@@ -32,16 +33,18 @@ export default {
         }
     },
     methods: {
-         createPrediction() {
-             const channelId = '144395906';
-             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
-             const access_token = 'iuo65boxk4t5tom717nul304zncd26'
+        createPrediction() {
+            const channelId = '144395906'
+            const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+            const access_token = 'iuo65boxk4t5tom717nul304zncd26'
 
-            const outcomesArray = this.outcomes.split('\n').filter((outcomes) => outcomes.trim() !== '')
+            const outcomesArray = this.outcomes
+                .split('\n')
+                .filter((outcomes) => outcomes.trim() !== '')
 
-            let outcomesAssociatifArray = [];
-            for (let i = 0; i < outcomesArray.length; i++){
-                outcomesAssociatifArray.push({'title':outcomesArray[i]});
+            let outcomesAssociatifArray = []
+            for (let i = 0; i < outcomesArray.length; i++) {
+                outcomesAssociatifArray.push({ title: outcomesArray[i] })
             }
 
             const body = {
@@ -51,21 +54,22 @@ export default {
                 prediction_window: parseInt(this.prediction_window, 10)
                 // prediction_window: this.prediction_window
             }
-            axios.post(`https://api.twitch.tv/helix/predictions`, body, {
-                headers: {
-                    Authorization: 'Bearer ' + access_token,
-                    'Client-ID': clientId,
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    console.log(response.data);
-                    alert('La prédiction a été créé avec succès !');
+            axios
+                .post(`https://api.twitch.tv/helix/predictions`, body, {
+                    headers: {
+                        Authorization: 'Bearer ' + access_token,
+                        'Client-ID': clientId,
+                        'Content-Type': 'application/json'
+                    }
                 })
-                .catch(error => {
-                    console.error(error);
-                    alert('Une erreur est survenue lors de la création de la prédiction.');
-                });
+                .then((response) => {
+                    console.log(response.data)
+                    alert('La prédiction a été créé avec succès !')
+                })
+                .catch((error) => {
+                    console.error(error)
+                    alert('Une erreur est survenue lors de la création de la prédiction.')
+                })
         }
     }
 }

@@ -1,18 +1,36 @@
 <template>
     <div>
         <h2>Top 100 Twitch Streams</h2>
-        <input type="text" id="search-input" placeholder="Rechercher une catégorie" v-model="searchQuery" />
+        <input
+            type="text"
+            id="search-input"
+            placeholder="Rechercher une catégorie"
+            v-model="searchQuery"
+        />
         <div class="top-games-container">
-            <div class="game" v-for="(game, index) in paginatedGames" :key="game.id" @click="redirectToTwitch(game)">
+            <div
+                class="game"
+                v-for="(game, index) in paginatedGames"
+                :key="game.id"
+                @click="redirectToTwitch(game)"
+            >
+                <!-- Lors d'une recherche, le ranking sur 100 n'est pas réinitialiser avec l'index de la boucle  -->
                 <div v-if="searchQuery">
                     <div class="rank">{{ game.originalRank }}</div>
                 </div>
+                <!-- Initialisation du ranking de 1 à 100 -->
                 <div v-else>
                     <div class="rank">{{ (currentPage - 1) * 20 + index + 1 }}</div>
                 </div>
                 <div class="game-info">
-                    <img :src="game.box_art_url.replace('{width}x{height}', '300x400')" :alt="game.name" class="game-image" />
-                    <div class="game-name" @click="redirectToTwitch(game.name)">{{ game.name }}</div>
+                    <img
+                        :src="game.box_art_url.replace('{width}x{height}', '300x400')"
+                        :alt="game.name"
+                        class="game-image"
+                    />
+                    <div class="game-name" @click="redirectToTwitch(game.name)">
+                        {{ game.name }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -20,13 +38,13 @@
             <button @click="previousPage" :disabled="currentPage === 1">Précédent</button>
             <button @click="nextPage" :disabled="currentPage === totalPages">Suivant</button>
         </div>
-        <p>page {{ currentPage }} sur {{ totalPages }}</p>
+        <p>Page {{ currentPage }} sur {{ totalPages }}</p>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
-import autoComplete from "@tarekraafat/autocomplete.js";
+import autoComplete from '@tarekraafat/autocomplete.js'
 
 const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
 const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
@@ -35,18 +53,18 @@ export default {
     name: 'TheTop100',
     data() {
         return {
-            topGames: [],
-            searchableGames: [],
-            searchQuery: '',
-            originalRankings: [],
-            currentPage: 1,
-            pageSize: 20,
+            topGames: [], // Tableau pour stocker le résultat de la recherche
+            searchQuery: '', // Recherche de l'utilisateur
+            originalRankings: [], // Tableau pour stocker les 100 catégories avec leurs rank
+            currentPage: 1, // Initialisation de la page actuel
+            pageSize: 20 // Nombre de catégorie par page
         }
     },
     mounted() {
         this.getTopGames()
     },
     methods: {
+        // Méthode pour récupérer les top catégories actuellement sur twitch
         async getTopGames() {
             const response = await axios.get('https://api.twitch.tv/helix/games/top?first=100', {
                 headers: {
@@ -55,92 +73,85 @@ export default {
                 }
             })
             this.topGames = response.data.data
-            this.searchableGames = this.topGames.map(game => {
-                return { value: game.name, data: game };
-            });
-            this.originalRankings = this.topGames.map((game, index) => index + 1);
-            this.topGames = response.data.data;
-            this.updateSearchableGames();
-            this.initAutoComplete();
+            this.originalRankings = this.topGames.map((game, index) => index + 1)
+            this.initAutoComplete()
         },
-        updateSearchableGames() {
-            this.searchableGames = this.filteredGames.map((game) => {
-                return { value: game.name, data: game };
-            });
-        },
+        // Initialisation et paramètrage de la barre de recherche
         initAutoComplete() {
-            const searchInput = document.querySelector('#search-input');
+            const searchInput = document.querySelector('#search-input')
 
             const autoCompletejs = new autoComplete({
                 data: {
                     src: this.topGames,
                     cache: true,
-                    key: "name"
+                    key: 'name'
                 },
-                selector: "#search-input",
+                selector: '#search-input',
                 threshold: 2,
                 debounce: 300,
-                searchEngine: "strict",
+                searchEngine: 'strict',
                 highlight: true,
                 maxResults: 10,
-                onSelection: feedback => {
-                    searchInput.blur();
-                    this.redirectToTwitch(feedback.selection.value);
+                onSelection: (feedback) => {
+                    searchInput.blur()
+                    this.redirectToTwitch(feedback.selection.value)
                 }
-            });
+            })
         },
+        // Méthode pour rediriger l'utilisateur sur la catégorie Twitch
         redirectToTwitch(game) {
-            window.open(`https://www.twitch.tv/directory/game/${game.name}`, '_blank');
+            window.open(`https://www.twitch.tv/directory/game/${game.name}`, '_blank')
         },
+        // Méthode pour retourner les catégories en cours d recherche avec le rank sur 100
         searchGames(query) {
-            this.resetPage(); // réinitialise le numéro de page actuel à 1
-            const filteredGames = this.topGames.filter(game => {
-                return game.name.toLowerCase().includes(query.toLowerCase());
-            });
+            this.resetPage() // réinitialise le numéro de page actuel à 1
+            const filteredGames = this.topGames.filter((game) => {
+                return game.name.toLowerCase().includes(query.toLowerCase())
+            })
             const rankedGames = filteredGames.map((game) => {
-                const originalRank = this.originalRankings[this.topGames.indexOf(game)];
-                return { ...game, originalRank };
-            });
-            return rankedGames.sort((a, b) => a.originalRank - b.originalRank);
+                const originalRank = this.originalRankings[this.topGames.indexOf(game)]
+                return { ...game, originalRank }
+            })
+            return rankedGames.sort((a, b) => a.originalRank - b.originalRank)
         },
         nextPage() {
             if (this.currentPage < this.totalPages) {
-                this.currentPage++;
+                this.currentPage++
             }
         },
         previousPage() {
             if (this.currentPage > 1) {
-                this.currentPage--;
+                this.currentPage--
             }
         },
         resetPage() {
-            this.currentPage = 1;
+            this.currentPage = 1
         }
     },
     computed: {
+        // Fonction pour renvoyer les 100 catégories de l'appel de l'API SI searchQuery est vide
         filteredGames() {
             if (this.searchQuery === '') {
-                return this.topGames;
+                return this.topGames
             } else {
-                return this.searchGames(this.searchQuery);
+                return this.searchGames(this.searchQuery)
             }
         },
         totalGames() {
-            return this.filteredGames.length;
+            return this.filteredGames.length
         },
         totalPages() {
-            return Math.ceil(this.totalGames / this.pageSize);
+            return Math.ceil(this.totalGames / this.pageSize)
         },
+        // Fonction pour renvoyer les jeux 20 par 20
         paginatedGames() {
-            const start = (this.currentPage - 1) * this.pageSize;
-            const end = start + this.pageSize;
-            return this.filteredGames.slice(start, end);
-        },
-    },
+            const start = (this.currentPage - 1) * this.pageSize
+            const end = start + this.pageSize
+            return this.filteredGames.slice(start, end)
+        }
+    }
 }
 </script>
-
-
 
 <style scoped>
 .top-games-container {
@@ -220,7 +231,7 @@ export default {
 }
 
 .pagination button {
-    background-color: #4CAF50; /* Green background color */
+    background-color: #4caf50; /* Green background color */
     border: none; /* Remove borders */
     color: white; /* White text color */
     padding: 12px 24px; /* Padding */
@@ -242,5 +253,4 @@ export default {
     color: #bbb; /* Lighter text color for disabled button */
     cursor: not-allowed; /* Disabled cursor on hover */
 }
-
 </style>
