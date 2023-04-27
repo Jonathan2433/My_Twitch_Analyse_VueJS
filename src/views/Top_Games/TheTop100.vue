@@ -3,12 +3,12 @@
         <h2>Top 100 Twitch Streams</h2>
         <input type="text" id="search-input" placeholder="Rechercher une catégorie" v-model="searchQuery" />
         <div class="top-games-container">
-            <div class="game" v-for="(game, index) in filteredGames" :key="game.id" @click="redirectToTwitch(game)">
+            <div class="game" v-for="(game, index) in paginatedGames" :key="game.id" @click="redirectToTwitch(game)">
                 <div v-if="searchQuery">
                     <div class="rank">{{ game.originalRank }}</div>
                 </div>
                 <div v-else>
-                    <div class="rank">{{ index + 1 }}</div>
+                    <div class="rank">{{ (currentPage - 1) * 20 + index + 1 }}</div>
                 </div>
                 <div class="game-info">
                     <img :src="game.box_art_url.replace('{width}x{height}', '300x400')" :alt="game.name" class="game-image" />
@@ -16,6 +16,11 @@
                 </div>
             </div>
         </div>
+        <div class="pagination">
+            <button @click="previousPage" :disabled="currentPage === 1">Précédent</button>
+            <button @click="nextPage" :disabled="currentPage === totalPages">Suivant</button>
+        </div>
+        <p>page {{ currentPage }} sur {{ totalPages }}</p>
     </div>
 </template>
 
@@ -33,7 +38,9 @@ export default {
             topGames: [],
             searchableGames: [],
             searchQuery: '',
-            originalRankings: []
+            originalRankings: [],
+            currentPage: 1,
+            pageSize: 20,
         }
     },
     mounted() {
@@ -61,7 +68,6 @@ export default {
                 return { value: game.name, data: game };
             });
         },
-
         initAutoComplete() {
             const searchInput = document.querySelector('#search-input');
 
@@ -87,6 +93,7 @@ export default {
             window.open(`https://www.twitch.tv/directory/game/${game.name}`, '_blank');
         },
         searchGames(query) {
+            this.resetPage(); // réinitialise le numéro de page actuel à 1
             const filteredGames = this.topGames.filter(game => {
                 return game.name.toLowerCase().includes(query.toLowerCase());
             });
@@ -95,6 +102,19 @@ export default {
                 return { ...game, originalRank };
             });
             return rankedGames.sort((a, b) => a.originalRank - b.originalRank);
+        },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage++;
+            }
+        },
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+            }
+        },
+        resetPage() {
+            this.currentPage = 1;
         }
     },
     computed: {
@@ -104,10 +124,22 @@ export default {
             } else {
                 return this.searchGames(this.searchQuery);
             }
-        }
-    }
+        },
+        totalGames() {
+            return this.filteredGames.length;
+        },
+        totalPages() {
+            return Math.ceil(this.totalGames / this.pageSize);
+        },
+        paginatedGames() {
+            const start = (this.currentPage - 1) * this.pageSize;
+            const end = start + this.pageSize;
+            return this.filteredGames.slice(start, end);
+        },
+    },
 }
 </script>
+
 
 
 <style scoped>
@@ -115,6 +147,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    margin: 20px 0px;
 }
 
 .game {
@@ -124,7 +157,7 @@ export default {
     display: flex;
     flex-direction: row;
     overflow: hidden;
-    width: calc(33.33% - 20px);
+    width: calc(25% - 20px);
     cursor: pointer;
 }
 
@@ -185,4 +218,29 @@ export default {
     border-color: hsla(160, 100%, 47%, 1);
     box-shadow: 0px 0px 5px hsla(160, 100%, 47%, 0.5);
 }
+
+.pagination button {
+    background-color: #4CAF50; /* Green background color */
+    border: none; /* Remove borders */
+    color: white; /* White text color */
+    padding: 12px 24px; /* Padding */
+    text-align: center; /* Center text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make it inline */
+    font-size: 16px; /* Font size */
+    margin: 4px 2px; /* Margin */
+    cursor: pointer; /* Add cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.pagination button:hover {
+    background-color: #3e8e41; /* Darker green on hover */
+}
+
+.pagination button:disabled {
+    background-color: #ddd; /* Grey background for disabled button */
+    color: #bbb; /* Lighter text color for disabled button */
+    cursor: not-allowed; /* Disabled cursor on hover */
+}
+
 </style>
