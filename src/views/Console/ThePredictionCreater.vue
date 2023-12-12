@@ -34,8 +34,8 @@ export default {
     methods: {
          createPrediction() {
              const channelId = '144395906';
-             const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
-             const access_token = 'iuo65boxk4t5tom717nul304zncd26'
+             const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
+             const access_token = '2sx6igh710ezldz41l24x8kw6eosna'
 
             const outcomesArray = this.outcomes.split('\n').filter((outcomes) => outcomes.trim() !== '')
 

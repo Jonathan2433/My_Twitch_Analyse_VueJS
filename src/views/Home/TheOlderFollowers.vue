@@ -33,15 +33,15 @@ export default {
     },
     methods: {
         async getFollowers() {
-            const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+            const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
             const userId = '144395906'
-            const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
+            const access_token = 's8baefnst2cg63vj7yfyc2v5ggy7kt'
 
             try {
                 let oldestFollowers = []
-
+                // https://api.twitch.tv/helix/channels/followers?broadcaster_id=123456
                 let response = await axios.get(
-                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100`,
+                    `https://api.twitch.tv/helix/channels/followers?broadcaster_id=${userId}&first=100`,
                     {
                         headers: {
                             'Client-ID': clientId,
@@ -49,12 +49,12 @@ export default {
                         }
                     }
                 )
-
+                console.log(response.data.pagination.cursor)
                 oldestFollowers.push(...response.data.data)
 
                 while (response.data.pagination.cursor) {
                     response = await axios.get(
-                        `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=100&after=${response.data.pagination.cursor}`,
+                        `https://api.twitch.tv/helix/channels/followers?broadcaster_id=${userId}&first=100&after=${response.data.pagination.cursor}`,
                         {
                             headers: {
                                 'Client-ID': clientId,
@@ -71,7 +71,7 @@ export default {
                     .slice(0, 5)
                 this.oldestFollowers = oldestFollowers
                 for (let i = 0; i < oldestFollowers.length; i++) {
-                    const follower = oldestFollowers[i].from_id
+                    const follower = oldestFollowers[i].user_id
                     const followerResponse = await axios.get(
                         `https://api.twitch.tv/helix/users?id=${follower}`,
                         {

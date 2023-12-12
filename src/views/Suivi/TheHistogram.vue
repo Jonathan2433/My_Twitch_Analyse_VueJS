@@ -18,14 +18,14 @@ export default {
     },
     methods: {
         async getFollowersList() {
-            const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
-            const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
+            const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
+            const access_token = 's8baefnst2cg63vj7yfyc2v5ggy7kt'
             let followers = []
             let cursor = ''
 
             do {
                 const response = await fetch(
-                    `https://api.twitch.tv/helix/users/follows?to_id=144395906&first=100&after=${cursor}`,
+                    `https://api.twitch.tv/helix/channels/followers?broadcaster_id=144395906&first=100&after=${cursor}`,
                     {
                         headers: {
                             'Client-ID': clientId,

@@ -14,9 +14,9 @@
 <script>
 import axios from 'axios'
 
-const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
 const userId = '144395906'
-const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
+const access_token = '2sx6igh710ezldz41l24x8kw6eosna'
 
 export default {
     name: 'TheLastStream',

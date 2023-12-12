@@ -19,9 +19,9 @@
 <script>
 import axios from 'axios';
 
-const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo';
+const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr';
 const userId = '144395906';
-const access_token = '9jfu059cnliwdj23a1sp6kvjmg1byv';
+const access_token = '2sx6igh710ezldz41l24x8kw6eosna';
 
 export default {
     name: 'TheLastPolls',

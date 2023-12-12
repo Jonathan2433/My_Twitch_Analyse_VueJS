@@ -20,8 +20,8 @@
 <script>
 import axios from 'axios'
 
-const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
-const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
+const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
+const access_token = '2sx6igh710ezldz41l24x8kw6eosna'
 
 export default {
     name: 'TheTop100',

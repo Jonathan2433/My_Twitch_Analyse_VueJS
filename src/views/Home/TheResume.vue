@@ -51,13 +51,13 @@ export default {
     },
     methods: {
         async getFollowers() {
-            const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo'
+            const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr'
             const userId = '144395906'
-            const access_token = '0wz7r1zmzohfaizos335a2gnb7e83p'
+            const access_token = 's8baefnst2cg63vj7yfyc2v5ggy7kt'
 
             try {
                 const response = await axios.get(
-                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}`,
+                    `https://api.twitch.tv/helix/channels/followers?broadcaster_id=${userId}`,
                     {
                         headers: {
                             'Client-ID': clientId,
@@ -69,7 +69,7 @@ export default {
                 this.totalFollowers = response.data.total
 
                 const usersResponse = await axios.get(
-                    `https://api.twitch.tv/helix/users/follows?to_id=${userId}&first=3`,
+                    `https://api.twitch.tv/helix/channels/followers?broadcaster_id=${userId}&first=3`,
                     {
                         headers: {
                             'Client-ID': clientId,
@@ -79,9 +79,11 @@ export default {
                 )
 
                 this.recentFollowers = usersResponse.data.data
+                console.log(this.recentFollowers)
 
                 for (let i = 0; i < 3; i++) {
-                    const follower = this.recentFollowers[i].from_id
+                    const follower = this.recentFollowers[i].user_id
+                    console.log(follower)
                     const followerResponse = await axios.get(
                         `https://api.twitch.tv/helix/users?id=${follower}`,
                         {

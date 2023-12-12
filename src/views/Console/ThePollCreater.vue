@@ -40,8 +40,8 @@ export default {
     methods: {
         createPoll() {
             const channelId = '144395906';
-            const clientId = 'ghcpdfskl6dqnkfqijx3vjht02zqgo';
-            const accessToken = '9jfu059cnliwdj23a1sp6kvjmg1byv';
+            const clientId = 'zm54nveq50rk5wufd41dzo9hdm7pcr';
+            const accessToken = '2sx6igh710ezldz41l24x8kw6eosna';
 
             const choicesArray = this.choices.split(',').map(choice => choice.trim());
 
